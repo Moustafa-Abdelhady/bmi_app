@@ -1,4 +1,8 @@
+import 'package:bmi_app/authantication/login_page.dart';
+import 'package:bmi_app/authantication/register_page.dart';
+import 'package:bmi_app/constants.dart';
 import 'package:bmi_app/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -14,13 +18,30 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+          inputDecorationTheme: InputDecorationTheme(
+              labelStyle: TextStyle(color: titlesColor),
+              hintStyle: TextStyle(color: mainTitleColor),
+              prefixIconColor: mainTitleColor),
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(seedColor: mainTitleColor),
+          primaryColor: mainTitleColor,
+          hintColor: mainTitleColor,
+          appBarTheme: AppBarTheme(surfaceTintColor: mainTitleColor)),
+
+      // make stream builder to check if user has logedin makes him going to homepage
+      //and if he new in app makes him going to login page
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return const BmiCalculator();
+          } else {
+            return const LoginPage();
+          }
+        },
       ),
-      home: const BmiCalculator(),
     );
   }
 }

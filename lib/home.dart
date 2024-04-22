@@ -1,5 +1,11 @@
+import 'package:bmi_app/authantication/login_page.dart';
+import 'package:bmi_app/bmi_history.dart';
 import 'package:bmi_app/result.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:uuid/uuid.dart';
 import '../constants.dart';
 
 import 'dart:math';
@@ -20,16 +26,62 @@ class _BmiCalculatorState extends State<BmiCalculator> {
 
   @override
   Widget build(BuildContext context) {
+    var mail = FirebaseAuth.instance.currentUser!.email;
+
+    uploadResult(
+      String email,
+      bool isMale,
+      int age,
+      double result,
+    ) async {
+      String uId = const Uuid().v1();
+      await FirebaseFirestore.instance.collection('bmi_history').add({
+        'id': uId,
+        'email': email,
+        'isMale': isMale,
+        'age': age,
+        'result': result,
+        'date': DateTime.now().toString().substring(0, 16),
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return const BmiHistory();
+                }),
+              );
+            },
+            icon: const Icon(Icons.history)),
         title: Text(
-          'Body Mass Index',
+          'BMI',
           style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                 color: titlesColor,
               ),
         ),
         centerTitle: true,
         elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              setState(() {});
+              Future.delayed(const Duration(milliseconds: 3), () {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginPage(),
+                    ),
+                    (route) => false);
+              });
+            },
+            icon: const Icon(Icons.logout),
+          )
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -40,9 +92,7 @@ class _BmiCalculatorState extends State<BmiCalculator> {
                 child: Row(
                   children: [
                     firstExpanded(context, 'Female'),
-                    const SizedBox(
-                      width: 8,
-                    ),
+                    Gap(8),
                     firstExpanded(context, 'Male'),
                   ],
                 ),
@@ -114,9 +164,7 @@ class _BmiCalculatorState extends State<BmiCalculator> {
                 child: Row(
                   children: [
                     thirdExpanded(context, 'weight'),
-                    const SizedBox(
-                      width: 8,
-                    ),
+                    const Gap(8),
                     thirdExpanded(context, 'age'),
                   ],
                 ),
@@ -145,6 +193,9 @@ class _BmiCalculatorState extends State<BmiCalculator> {
                   ),
                   onPressed: () {
                     result = weight / pow(height / 100, 2);
+
+                    uploadResult(mail!, isMale, age, result);
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {
@@ -193,9 +244,7 @@ class _BmiCalculatorState extends State<BmiCalculator> {
                 height: 90,
                 width: 90,
               ),
-              const SizedBox(
-                height: 8,
-              ),
+              const Gap(8),
               Text(
                 (gender == 'Male') ? 'Male' : 'FEMALE',
                 style: Theme.of(context).textTheme.headlineLarge,
@@ -218,12 +267,10 @@ class _BmiCalculatorState extends State<BmiCalculator> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              title, // print (title)
+              title,
               style: Theme.of(context).textTheme.headlineLarge,
             ),
-            const SizedBox(
-              height: 8,
-            ),
+            const Gap(8),
             Text(
               (title == 'weight') ? '$weight' : '$age',
               style: Theme.of(context).textTheme.headlineLarge,
@@ -253,9 +300,7 @@ class _BmiCalculatorState extends State<BmiCalculator> {
                     color: Colors.black,
                   ),
                 ),
-                const SizedBox(
-                  width: 30,
-                ),
+                const Gap(20),
                 FloatingActionButton(
                   onPressed: () {
                     setState(() {
