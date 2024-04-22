@@ -1,12 +1,12 @@
-import 'package:bmi_app/authantication/login_page.dart';
-import 'package:bmi_app/bmi_history.dart';
-import 'package:bmi_app/result.dart';
+import 'package:bmi_app/pages/authantication/login_page.dart';
+import 'package:bmi_app/pages/bmi_history.dart';
+import 'package:bmi_app/pages/result.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:uuid/uuid.dart';
-import '../constants.dart';
+import '../../constants.dart';
 
 import 'dart:math';
 
@@ -26,7 +26,9 @@ class _BmiCalculatorState extends State<BmiCalculator> {
 
   @override
   Widget build(BuildContext context) {
-    var mail = FirebaseAuth.instance.currentUser!.email;
+    var user = FirebaseAuth.instance.currentUser;
+    var mail = user != null ? user.email : null;
+    // var mail = FirebaseAuth.instance.currentUser!.email;
 
     uploadResult(
       String email,
@@ -92,7 +94,7 @@ class _BmiCalculatorState extends State<BmiCalculator> {
                 child: Row(
                   children: [
                     firstExpanded(context, 'Female'),
-                    Gap(8),
+                    const Gap(8),
                     firstExpanded(context, 'Male'),
                   ],
                 ),

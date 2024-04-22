@@ -1,4 +1,4 @@
-import 'package:bmi_app/authantication/login_page.dart';
+import 'package:bmi_app/pages/authantication/login_page.dart';
 import 'package:bmi_app/constants.dart';
 import 'package:bmi_app/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -30,11 +30,13 @@ class _RegisterPageState extends State<RegisterPage> {
       );
 
       if (response == "Success") {
-        // ignore: use_build_context_synchronously
-        return ScaffoldMessenger.of(context).showSnackBar(snackbar);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(snackbar);
+        }
       } else {
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context).showSnackBar(snackbar);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(snackbar);
+        }
       }
     } on Exception catch (e) {
       return e.toString();
@@ -129,12 +131,14 @@ class _RegisterPageState extends State<RegisterPage> {
                           borderRadius: BorderRadius.circular(16))),
                   onPressed: () {
                     register();
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginPage(),
-                        ),
-                        (route) => false);
+                    Future.delayed(const Duration(milliseconds: 3), () {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginPage(),
+                          ),
+                          (route) => false);
+                    });
                   },
                   child: Text(
                     'Register'.toUpperCase(),

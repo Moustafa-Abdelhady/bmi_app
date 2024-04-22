@@ -1,9 +1,8 @@
 // import 'package:flutter/foundation.dart';
-import 'package:bmi_app/authantication/register_page.dart';
+import 'package:bmi_app/pages/authantication/register_page.dart';
 import 'package:bmi_app/constants.dart';
-import 'package:bmi_app/home.dart';
+import 'package:bmi_app/pages/home.dart';
 import 'package:bmi_app/services/auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:gap/gap.dart';
@@ -31,12 +30,13 @@ class _LoginPageState extends State<LoginPage> {
       );
       if (loginRes == "Success") {
         const CircularProgressIndicator();
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(snackbar);
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const BmiCalculator()),
             (route) => false);
-      } else if (loginRes == "Please enter all fields" || loginRes == null) {
+      } else if (loginRes == "Please enter all fields") {
         ScaffoldMessenger.of(context).showSnackBar(snackbar);
       }
     } on Exception catch (e) {
@@ -109,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                         emailCont.text.contains('@') &
                             passwordCont.text.isEmpty ||
                         passwordCont.text.length < 8) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Center(
                             child: Text(
                                 'Please enter an valid Mail and password')),

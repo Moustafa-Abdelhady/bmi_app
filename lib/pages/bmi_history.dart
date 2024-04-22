@@ -1,9 +1,7 @@
 import 'package:bmi_app/constants.dart';
+import 'package:bmi_app/widgets/bmi_history_container.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 
 class BmiHistory extends StatefulWidget {
@@ -31,7 +29,7 @@ class _BmiHistoryState extends State<BmiHistory> {
         centerTitle: true,
       ),
       body: Padding(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -103,101 +101,5 @@ class _BmiHistoryState extends State<BmiHistory> {
         ),
       ),
     );
-  }
-}
-
-class ShowHistory extends StatelessWidget {
-  const ShowHistory(
-      {super.key,
-      required this.mail,
-      required this.res,
-      required this.date,
-      required this.age,
-      required this.gender});
-  final String mail;
-  final String date;
-  final String age;
-  final String gender;
-  final String res;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        height: 100,
-        padding: EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: defaultColor,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Text(
-                  'Mail',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                const Gap(8),
-                Text(
-                  mail,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Spacer(),
-                Row(
-                  children: [
-                    Text(
-                      'Date',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    const Gap(8),
-                    Text(
-                      date,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Text(
-                  'Gender',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                const Gap(8),
-                Text(
-                  gender,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Spacer(),
-                Row(
-                  children: [
-                    Text(
-                      'Age',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    const Gap(8),
-                    Text(
-                      age,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Text(
-                  'Result',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                const Gap(8),
-                Text(
-                  res,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ],
-        ));
   }
 }

@@ -1,10 +1,5 @@
-import 'package:bmi_app/bmi_history.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
-
-import '../constants.dart';
+import '../../constants.dart';
 
 class BmiResultScreen extends StatefulWidget {
   final double result;
